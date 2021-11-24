@@ -39,11 +39,11 @@ def visualize_features_select(df_scores, df_columns, df_bool=pd.DataFrame(), \
     return top_limit
 
 # визуализация кривой обучения
-def visualize_learning_curves(train_errors, valid_errors):
+def visualize_learning_curves(train_errors, valid_errors, scoring_name='Scoring'):
 
     plt.plot(train_errors, 'r-+', linewidth=2, label='train')
     plt.plot(valid_errors, 'b-', linewidth=3, label='valid')
     plt.xlabel('Train Size')
-    plt.ylabel('Scoring')
+    plt.ylabel(scoring_name)
     plt.legend()
     plt.show()

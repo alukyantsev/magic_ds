@@ -110,7 +110,7 @@ def model_fit(estimator, param_grid,
     ###
     
     # проверяем лучшие параметры по валидационной выборке
-    stage2_valid_score = 0 if scoring_greater_is_better else np.inf
+    stage2_valid_score = -np.inf if scoring_greater_is_better else np.inf
     stage2_valid_param = {}
     for param in stage1_sorted_params:
         stage2_model = estimator(**param).fit(X_train, y_train)
@@ -138,7 +138,8 @@ def model_fit(estimator, param_grid,
             estimator(**stage2_valid_param),
             X_train, y_train, X_valid, y_valid,
             learning_curves_dots=learning_curves_dots,
-            scoring_greater_is_better=scoring_greater_is_better,
+            scoring=scoring,
+            scoring_f=scoring_f,
             cv=cv
         )
 
@@ -176,7 +177,8 @@ def learning_curves(
     model,
     X_train, y_train, X_valid, y_valid,
     learning_curves_dots=100,
-    scoring_greater_is_better=True,
+    scoring='neg_mean_squared_error',
+    scoring_f=accuracy_score,
     cv=5):
 
     train_errors, valid_errors = [], []
@@ -189,14 +191,10 @@ def learning_curves(
         model.fit(X_train[:m], y_train[:m])
         y_train_pred = model.predict(X_train[:m])
         y_valid_pred = model.predict(X_valid)
-        if scoring_greater_is_better:
-            train_errors.append(accuracy_score(y_train[:m], y_train_pred))
-            valid_errors.append(accuracy_score(y_valid, y_valid_pred))
-        else:
-            train_errors.append(mean_squared_error(y_train[:m], y_train_pred))
-            valid_errors.append(mean_squared_error(y_valid, y_valid_pred))
-    train_errors = train_errors if scoring_greater_is_better else np.sqrt(train_errors)
-    valid_errors = valid_errors if scoring_greater_is_better else np.sqrt(valid_errors)
+        train_errors.append(scoring_f(y_train[:m], y_train_pred))
+        valid_errors.append(scoring_f(y_valid, y_valid_pred))
+    train_errors = train_errors if scoring != 'neg_mean_squared_error' else np.sqrt(train_errors)
+    valid_errors = valid_errors if scoring != 'neg_mean_squared_error' else np.sqrt(valid_errors)
 
     # выводим график кривых обучения
-    visualize_learning_curves(train_errors, valid_errors)
+    visualize_learning_curves(train_errors, valid_errors, scoring_name=scoring)
