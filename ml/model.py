@@ -4,6 +4,15 @@ import math
 from sklearn.metrics import make_scorer, accuracy_score, f1_score, recall_score, precision_score, roc_auc_score, max_error, mean_absolute_error, mean_squared_error, median_absolute_error, r2_score
 from sklearn.model_selection import GridSearchCV
 from . visualize import *
+from . lazypredict import LazyClassifier, LazyRegressor
+
+# делаем грубую оценку моделей по датасету
+def model_score(estimator, X_train, y_train, X_valid, y_valid, verbose=0, custom_metric=None):
+
+    clf = estimator(verbose=verbose, ignore_warnings=True, custom_metric=custom_metric, predictions=True,
+                         random_state=42, classifiers='all')
+    models, predictions = clf.fit(X_train, X_valid, y_train, y_valid)
+    return models, predictions
 
 # подбор параметров модели через GridSearchCV
 #
