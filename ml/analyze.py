@@ -33,15 +33,21 @@ def analyze_corr(df):
     return df.corr()
 
 # анализируем список колонок на нормализацию
-def analyze_normal(df, columns=[]):
+def analyze_normal(df, columns=[], skew_score=0.5):
 
+    abnormal_list = []
     for c in columns if len(columns) > 0 else df.columns:
+        df_skew = skew(df[c])
         print('='*20 + ' ' + c + ' ' + '='*20)
         visualize_features_hist(df, c)
         print('mean : ', np.mean(df[c]))
         print('var  : ', np.var(df[c]))
-        print('skew : ', skew(df[c]))
+        print('skew : ', df_skew)
         print('kurt : ', kurtosis(df[c]))
         print('shapiro : ', shapiro(df[c]))
         print('normaltest : ', normaltest(df[c]))
         print('\n')
+        if abs(df_skew) > skew_score:
+            abnormal_list.append(c)
+
+    return abnormal_list

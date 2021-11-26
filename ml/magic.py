@@ -17,7 +17,7 @@ def magic_pred(df, target, replace={}):
     df0 = drop_gap(df0)
     # числовые значения привели к float
     df0 = transform_float64(df0, [target])
-    df0 = transform_float64(df0)
+    #df0 = transform_float64(df0) # почему-то удаляет название колонок
     # нечисловые значения кодируем в label encoder
     df0 = encode_le(df0, df0.select_dtypes(exclude=['number']))
     # разбиваем выборку

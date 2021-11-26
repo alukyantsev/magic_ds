@@ -90,7 +90,7 @@ def model_fit(estimator, param_grid,
         n_jobs=n_jobs,
         cv=cv
     )
-    gsearch.fit(X_train, y_train)
+    gsearch.fit(X_train.values, y_train.values)
     
     # выводим результаты
     if not mute:
@@ -122,8 +122,8 @@ def model_fit(estimator, param_grid,
     stage2_valid_score = -np.inf if scoring_greater_is_better else np.inf
     stage2_valid_param = {}
     for param in stage1_sorted_params:
-        stage2_model = estimator(**param).fit(X_train, y_train)
-        y_valid_pred = stage2_model.predict(X_valid)
+        stage2_model = estimator(**param).fit(X_train.values, y_train.values)
+        y_valid_pred = stage2_model.predict(X_valid.values)
         stage2_score = scoring_f(y_valid, y_valid_pred)
         if (stage2_score > stage2_valid_score) and scoring_greater_is_better:
             stage2_valid_score = stage2_score
@@ -197,9 +197,9 @@ def learning_curves(
     
     # собираем информацию об обучении модели и ошибках
     for m in range(cv, len(X_train)+1, learning_curves_step):
-        model.fit(X_train[:m], y_train[:m])
-        y_train_pred = model.predict(X_train[:m])
-        y_valid_pred = model.predict(X_valid)
+        model.fit(X_train[:m].values, y_train[:m].values)
+        y_train_pred = model.predict(X_train[:m].values)
+        y_valid_pred = model.predict(X_valid.values)
         train_errors.append(scoring_f(y_train[:m], y_train_pred))
         valid_errors.append(scoring_f(y_valid, y_valid_pred))
     train_errors = train_errors if scoring != 'neg_mean_squared_error' else np.sqrt(train_errors)
