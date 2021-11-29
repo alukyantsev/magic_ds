@@ -1,11 +1,11 @@
 import pandas as pd
 import numpy as np
-import xgboost as xgb
 from . common import *
 from . drop import *
 from . encode import *
 from . select import select_eli5
 from . split import *
+from . model_boost import *
 
 # делаем магию и по начальному датасету делаем первый прогноз по модели xgboost
 def magic_pred(df, target, replace={}):
@@ -26,8 +26,8 @@ def magic_pred(df, target, replace={}):
     # запускаем модель
     model = select_eli5(
         X_train, y_train,
-        #xgb.XGBRegressor(learning_rate=0.01, max_depth=5, min_child_weight=3, n_estimators=300, random_state=42),
-        xgb.XGBClassifier(learning_rate=0.01, max_depth=5, min_child_weight=3, n_estimators=300, random_state=42, objective='binary:logistic', eval_metric='mlogloss'),
+        #xgb.XGBRegressor(**param_XGBRegressor),
+        xgb.XGBClassifier(**param_XGBClassifier),
         mute=1, limit=100)
     # делаем предикт
     if(len(X_test)):

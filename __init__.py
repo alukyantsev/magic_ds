@@ -9,3 +9,7 @@ import numpy as np
 import math
 import time
 from tqdm import tqdm
+import pickle
+
+# test = reload(sys.modules['magic_ds.ml.common']).test
+from importlib import reload

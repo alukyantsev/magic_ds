@@ -1,1 +1,1 @@
-# magic-ds
+# magic_ds
