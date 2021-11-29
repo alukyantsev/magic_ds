@@ -20,21 +20,21 @@ def model_score(
 
 # подбор параметров модели через GridSearchCV
 #
-# model, y_pred, y_valid = model_fit(estimator, param_grid,
-#                                    X_train, y_train, X_valid, y_valid, X_test, y_test,
-#                                    scoring='accuracy', result=10, mute=False)
+# model_dict = model_fit(estimator, param_grid,
+#                        X_train, y_train, X_valid, y_valid, X_test, y_test,
+#                        scoring='accuracy', result=10, mute=False)
 # если переданы параметры X_test, y_test, то считается все 3 стадии проверки
 # возвращается модель и предикт по X_test, X_valid
 #
-# model, y_pred, y_valid = model_fit(estimator, param_grid,
-#                                    X_train, y_train, X_valid, y_valid, X_test,
-#                                    scoring='accuracy', result=10, mute=False)
+# model_dict = model_fit(estimator, param_grid,
+#                        X_train, y_train, X_valid, y_valid, X_test,
+#                        scoring='accuracy', result=10, mute=False)
 # если не передан y_test, то считаются 2 стадии, а на 3 стадии делается предикт по X_test
 # возвращается модель и предикт по X_test, X_valid
 #
-# model, y_valid = model_fit(estimator, param_grid,
-#                            X_train, y_train, X_valid, y_valid,
-#                            scoring='accuracy', result=10, mute=False)
+# model_dict = model_fit(estimator, param_grid,
+#                        X_train, y_train, X_valid, y_valid,
+#                        scoring='accuracy', result=10, mute=False)
 # если не передан X_test, y_test, то считаются 2 стадии
 # возвращается модель и предикт по X_valid
 #
@@ -43,10 +43,10 @@ def model_score(
 # 
 # параметр learning_curves_dots обозначает количество точек для кривой обучения
 # 
-# model, y_pred, y_valid = model_fit(estimator, param_grid,
-#                                    X_train, y_train, X_valid, y_valid, X_test,
-#                                    result=10, scoring='f1', learning_curves_dots=10,
-#                                    threshold=np.arange(0.1, 0.7, step=0.01))
+# model_dict = model_fit(estimator, param_grid,
+#                        X_train, y_train, X_valid, y_valid, X_test,
+#                        result=10, scoring='f1', learning_curves_dots=10,
+#                        threshold=np.arange(0.1, 0.7, step=0.01))
 # параметр threshold применяется для задач бинарной классификации для несбалансированного датасете
 # принимает массив значений, на основе которых проверяется максимальный скоринг при определенной
 # вероятности принадлежности к классу у модели
@@ -62,7 +62,7 @@ def model_fit(estimator, param_grid,
                 cv=5,
                 learning_curves_dots=10,
                 threshold=[]
-               ):
+):
 
     # задаем словарь скоринга
     if scoring == 'accuracy':
@@ -189,7 +189,7 @@ def model_fit(estimator, param_grid,
             skplt.metrics.plot_precision_recall(y_valid.values, stage2_y_valid_probas)
             plt.show()
 
-        # если модель классификации
+        # если модель является классификацией
         if scoring_greater_is_better:
             print(classification_report(y_valid, stage2_y_valid_pred))
             skplt.metrics.plot_confusion_matrix(y_valid, stage2_y_valid_pred, normalize=False)
@@ -257,7 +257,8 @@ def learning_curves(
     scoring='accuracy',
     scoring_f=accuracy_score,
     cv=5,
-    threshold=0):
+    threshold=0
+):
 
     train_errors, valid_errors = [], []
     x = []

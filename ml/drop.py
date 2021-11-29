@@ -13,7 +13,7 @@ def drop_features(df, columns):
 def drop_gap(df, limit=50):
 
     gap_df = gap_info(df)
-    gap_columns = columns if len(columns) > 0 else list(gap_df[ gap_df['% of Total Values'] > limit ].index)
+    gap_columns = list(gap_df[ gap_df['% of Total Values'] > limit ].index)
     print('We will remove %d columns with limit %d%%.' % (len(gap_columns), limit))
     df0 = df.copy()
     df0 = df0.drop(columns = gap_columns)
