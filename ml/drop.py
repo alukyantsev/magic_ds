@@ -27,7 +27,7 @@ def drop_corr(df, limit=0.98):
     index_corr = []
     for column in list(df_corr.columns):
         for index in list(df_corr.index):
-            if column != index:
+            if (column != index) and (column not in index_corr) and (index not in columns_corr):
                 if abs(df_corr[column][index] > limit):
                     columns_corr.append(column)
                     index_corr.append(index)
