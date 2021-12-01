@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import math
 from sklearn.preprocessing import PowerTransformer, StandardScaler, PolynomialFeatures
 from sklearn.utils import resample
 from imblearn.over_sampling import SMOTE
