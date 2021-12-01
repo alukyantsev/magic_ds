@@ -207,14 +207,6 @@ def model_fit(estimator, param_grid,
                 cv=cv,
                 threshold=stage2_valid_t_threshold
             )
-            skplt.estimators.plot_learning_curve(
-                estimator(**stage2_valid_param),
-                X_train, y_train,
-                cv=cv,
-                scoring=scoring,
-                random_state=42
-            )
-            plt.show()
 
     ###
     ### STAGE 3: делаем предикт по тестовым данным
