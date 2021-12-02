@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import PowerTransformer, StandardScaler, PolynomialFeatures
 from sklearn.utils import resample
-from imblearn.over_sampling import SMOTE
+from imblearn.over_sampling import SMOTE, ADASYN
 from . fillna import *
 
 # считаем логарифм списка колонок
@@ -84,5 +84,13 @@ def transform_smote(X_train, y_train, random_state=42):
     
     sm = SMOTE(random_state=random_state)
     X0, y0 = sm.fit_resample(X_train, y_train)
+    
+    return { 'X_train': X0, 'y_train': y0 }
+
+# делает преобразование ADASYN для несбалансированного датасета
+def transform_ada(X_train, y_train, random_state=42):    
+    
+    ada = ADASYN(random_state=random_state)
+    X0, y0 = ada.fit_resample(X_train, y_train)
     
     return { 'X_train': X0, 'y_train': y0 }
