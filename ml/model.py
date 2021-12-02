@@ -237,6 +237,31 @@ def model_fit(estimator, param_grid,
     if not mute:
         print('='*20 + ' Stage 3: test ' + '='*21 + '\n')
         print('Best test score: %f using %s\n' % (stage3_score, stage2_valid_param))
+
+        # если модель бинарной классификации не сбалансирована
+        if len(threshold) > 0:
+            print('Best threshold score: %f using %f\n' % (stage3_score, stage2_valid_t_threshold))
+            skplt.metrics.plot_precision_recall(y_test.values, y_test_probas)
+            plt.show()
+
+        # если модель является классификацией
+        if scoring_greater_is_better:
+            print(classification_report(y_test, y_test_pred))
+            skplt.metrics.plot_confusion_matrix(y_test, y_test_pred, normalize=False)
+            plt.show()
+
+        # вызываем функцию визуализации кривых обучения
+        if learning_curves_dots != 0:
+            print('='*20 + ' Stage 3: learning curves ' + '='*21)
+            learning_curves(
+                estimator(**stage2_valid_param),
+                X_train, y_train, X_test, y_test,
+                learning_curves_dots=learning_curves_dots,
+                scoring=scoring,
+                scoring_f=scoring_f,
+                cv=cv,
+                threshold=stage2_valid_t_threshold
+            )
     
     # возвращаем модель и предикт
     return { 'model': stage3_model, 'y_pred': y_test_pred, 'y_valid_pred': stage2_y_valid_pred }
