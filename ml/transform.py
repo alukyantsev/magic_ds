@@ -53,31 +53,31 @@ def transform_poly(X, degree=2):
     X0 = poly.fit_transform(X0)
     return X0
 
-# делает upsampling для несбалансированного датасета
-def transform_upsample(X_train, y_train, big_value=0, small_value=1, random_state=42):
+# делает oversampling для несбалансированного датасета
+def transform_oversample(X_train, y_train, major_value=0, minor_value=1, random_state=42):
 
     target = 'target'
     df0 = pd.concat( [X_train, pd.Series(y_train, name=target)], axis=1 )
-    big = df0[ df0[target] == big_value ]
-    small = df0[ df0[target] == small_value ]
+    major = df0[ df0[target] == major_value ]
+    minor = df0[ df0[target] == minor_value ]
 
-    small_upsampled = resample(small, replace=True, n_samples=len(big), random_state=random_state)
-    df0_upsampled = pd.concat([big, small_upsampled])
+    minor_oversampled = resample(minor, replace=True, n_samples=len(major), random_state=random_state)
+    df0_oversampled = pd.concat([major, minor_oversampled])
 
-    return { 'X_train': df0_upsampled.drop(target, axis=1), 'y_train': df0_upsampled[target] }
+    return { 'X_train': df0_oversampled.drop(target, axis=1), 'y_train': df0_oversampled[target] }
 
-# делает downsampling для несбалансированного датасета
-def transform_downsample(X_train, y_train, big_value=0, small_value=1, random_state=42):
+# делает undersampling для несбалансированного датасета
+def transform_undersample(X_train, y_train, major_value=0, minor_value=1, random_state=42):
 
     target = 'target'
     df0 = pd.concat( [X_train, pd.Series(y_train, name=target)], axis=1 )
-    big = df0[ df0[target] == big_value ]
-    small = df0[ df0[target] == small_value ]
+    major = df0[ df0[target] == major_value ]
+    minor = df0[ df0[target] == minor_value ]
 
-    big_downsampled = resample(big, replace=True, n_samples=len(small), random_state=random_state)
-    df0_downsampled = pd.concat([big_downsampled, small])
+    major_undersampled = resample(major, replace=True, n_samples=len(minor), random_state=random_state)
+    df0_undersampled = pd.concat([major_undersampled, minor])
 
-    return { 'X_train': df0_downsampled.drop(target, axis=1), 'y_train': df0_downsampled[target] }
+    return { 'X_train': df0_undersampled.drop(target, axis=1), 'y_train': df0_undersampled[target] }
 
 # делает преобразование SMOTE для несбалансированного датасета
 def transform_smote(X_train, y_train, random_state=42):    

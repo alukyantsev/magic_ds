@@ -2,7 +2,7 @@ from sklearnex import patch_sklearn
 patch_sklearn()
 
 from . analyze import *
-from . bagging import *
+from . stacking import *
 from . common import *
 from . drop import *
 from . encode import *
