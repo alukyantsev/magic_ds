@@ -1,6 +1,3 @@
-from sklearnex import patch_sklearn
-patch_sklearn()
-
 from . analyze import *
 from . stacking import *
 from . common import *
