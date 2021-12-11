@@ -13,7 +13,13 @@ param_XGBRegressor = {
 param_CatBoostClassifier = {
     'max_depth': 5, 'n_estimators': 100, 'learning_rate': 0.1, 'random_state': 42
 }
+param_CatBoostRegressor = {
+    'max_depth': 5, 'n_estimators': 100, 'learning_rate': 0.1, 'random_state': 42
+}
 param_LGBMClassifier = {
+    'max_depth': 5, 'n_estimators': 100, 'learning_rate': 0.1, 'random_state': 42
+}
+param_LGBMRegressor = {
     'max_depth': 5, 'n_estimators': 100, 'learning_rate': 0.1, 'random_state': 42
 }
 
@@ -54,6 +60,7 @@ params_base_XGBRegressor = {
     'n_estimators':[100, 300, 500],
     'random_state': [42]
 }
+
 params_CatBoostClassifier = {
     'max_depth':[3, 5, 7],
     'n_estimators':[100, 300, 500],
@@ -68,6 +75,21 @@ params_base_CatBoostClassifier = {
     'random_state': [42],
     'verbose': [0]
 }
+params_CatBoostRegressor = {
+    'max_depth':[3, 5, 7],
+    'n_estimators':[100, 300, 500],
+    'learning_rate':[0.01, 0.1],
+    'random_state': [42],
+    'verbose': [0]
+}
+params_base_CatBoostRegressor = {
+    'max_depth':[5, 7],
+    'n_estimators':[100, 300, 500],
+    'learning_rate':[0.1],
+    'random_state': [42],
+    'verbose': [0]
+}
+
 params_LGBMClassifier = {
     'max_depth':[3, 5, 7],
     'n_estimators':[100, 300, 500],
@@ -76,6 +98,18 @@ params_LGBMClassifier = {
     'random_state': [42]
 }
 params_base_LGBMClassifier = {
+    'max_depth':[3, 5],
+    'n_estimators':[100, 300, 500],
+    'random_state': [42]
+}
+params_LGBMRegressor = {
+    'max_depth':[3, 5, 7],
+    'n_estimators':[100, 300, 500],
+    'min_child_weight':[1, 2, 5],
+    'learning_rate':[0.01, 0.1],
+    'random_state': [42]
+}
+params_base_LGBMRegressor = {
     'max_depth':[3, 5],
     'n_estimators':[100, 300, 500],
     'random_state': [42]

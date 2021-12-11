@@ -44,7 +44,7 @@ def visualize_learning_curves(train_errors, valid_errors, x, scoring_name='Scori
     plt.plot(x, train_errors, 'r-+', linewidth=2, label='train')
     plt.plot(x, valid_errors, 'b-', linewidth=3, label='valid')
     plt.xlabel('Training examples')
-    plt.ylabel('Score: ' + scoring_name)
+    plt.ylabel('Score: ' + str(scoring_name))
     plt.title('Learning Curves')
     plt.legend()
     plt.grid()

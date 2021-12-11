@@ -34,6 +34,6 @@ def rename_columns(df):
     columns = [x.replace(" ", "_").lower() for x in df.columns]
     return columns
 
-def save_csv(df, path='', name=''):
+def save_csv(df, path='', name='', index=False):
 
-    df.to_csv(path + name + '_' + str(round(time.time())) + '.csv', index=False)
+    df.to_csv(path + name + '_' + str(round(time.time())) + '.csv', index=index)

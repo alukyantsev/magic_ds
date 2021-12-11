@@ -95,6 +95,9 @@ def model_fit(estimator, param_grid,
     if scoring == 'r2':
         scoring_f = r2_score
         scoring_greater_is_better = True
+    if scoring == smape:
+        scoring_f = smape_error
+        scoring_greater_is_better = False
 
     ###
     ### STAGE 1: обучаем модель на тренировочных данных
