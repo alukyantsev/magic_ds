@@ -86,16 +86,16 @@ def transform_undersample(X_train, y_train, major_value=np.nan, minor_value=np.n
     target = 'target'
     df0 = pd.concat( [X_train, pd.Series(y_train, name=target)], axis=1 )
     minor = df0[ df0[target] == minor_value ]
-    df0_oversampled = minor
+    df0_undersampled = minor
 
     for i in list(y_train.value_counts().sort_values(ascending=False).index)[:-1]:
         major = df0[ df0[target] == i ]
         major_oversampled = resample(major, replace=True, n_samples=len(minor), random_state=random_state)
-        df0_oversampled = pd.concat([df0_oversampled, major_oversampled])
+        df0_undersampled = pd.concat([df0_undersampled, major_oversampled])
 
-    df0_oversampled = shuffle(df0_oversampled, random_state=random_state)
+    df0_undersampled = shuffle(df0_undersampled, random_state=random_state)
 
-    return { 'X_train': df0_oversampled.drop(target, axis=1), 'y_train': df0_oversampled[target] }
+    return { 'X_train': df0_undersampled.drop(target, axis=1), 'y_train': df0_undersampled[target] }
 
 # делает преобразование SMOTE для несбалансированного датасета
 def transform_smote(X_train, y_train, random_state=42):    

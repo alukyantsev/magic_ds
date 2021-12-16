@@ -161,10 +161,10 @@ def stacking_fit(
 
     else:
         
-        if len(average) > 0:
-            model_score = scoring_f(y_test, y_pred, average=average)
-        else:
+        if len(average) == 0:
             model_score = scoring_f(y_test, y_pred)
+        else:
+            model_score = scoring_f(y_test, y_pred, average=average)
 
         print('Best test score: %f\n' % model_score)
         return { 'model': model, 'model_score': model_score, 'y_pred': y_pred }
