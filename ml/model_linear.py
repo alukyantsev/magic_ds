@@ -1,4 +1,4 @@
-from sklearn.linear_model import LinearRegression, Ridge, RidgeCV, SGDRegressor, Lasso, LassoCV, ElasticNet, ElasticNetCV
+from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge, RidgeCV, SGDRegressor, Lasso, LassoCV, ElasticNet, ElasticNetCV
 
 # набор параметров для GridSearchCV
 params_Ridge = {

@@ -57,7 +57,7 @@ def split_dict_struct(df_split):
     for k in df_split.keys():
         print()
         for l in df_split[k].keys():
-            print('%s -> %s' % (k, l))
+            print( '%s -> %s %s' % ( k, l, str(np.array(df_split[k][l]).shape) ) )
             if type(df_split[k][l]) is dict:
                 for m in df_split[k][l].keys():
-                    print('%s -> %s -> %s' % (k, l, m))
+                    print( '%s -> %s -> %s %s' % ( k, l, m, str(np.array(df_split[k][l][m]).shape) ) )

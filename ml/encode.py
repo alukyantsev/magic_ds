@@ -23,11 +23,19 @@ def encode_ohe_full(df, columns):
     return df0
 
 # кодируем список колонок через label-encoding
-def encode_le(df, columns):
+def encode_le(df, columns, d=[{}]):
 
     df0 = df.copy()
+    i = 0
     for c in columns:
-        label = LabelEncoder()
-        label.fit(df[c].drop_duplicates())
-        df0[c] = label.transform(df[c])
+
+        if len(d[i]) > 0:
+            df0[c] = df0[c].map(d[i])
+        else:
+            label = LabelEncoder()
+            label.fit(df[c].drop_duplicates())
+            df0[c] = label.transform(df[c])
+        
+        i += 1
+
     return df0

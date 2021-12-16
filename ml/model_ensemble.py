@@ -1,4 +1,4 @@
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, StackingClassifier, StackingRegressor, VotingClassifier, VotingRegressor, BaggingClassifier, BaggingRegressor
 
 # набор параметров для одной модели
 param_RandomForestClassifier = {

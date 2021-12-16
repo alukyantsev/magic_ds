@@ -5,6 +5,7 @@ import scikitplot as skplt
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from . model_scoring import *
+from . model_linear import *
 
 # подбирает коэффициенты для списка моделей на основе валидационных данных
 # stacking_coef(y_valid.values, [y_valid_xgb_norma, y_valid_ctb_norma, y_valid_lgb_norma], scoring_f=f1_score)
@@ -85,10 +86,7 @@ def stacking_pred(
 
     # вытаскиваем парметры из переданного датафрейма
     stacking_coef_first = stacking_coef_first if not math.isnan(stacking_coef_first) else df_stacking[:1].index[0]
-    if threshold:
-        stacking_drop_list = ['threshold', 'score']
-    else:
-        stacking_drop_list = ['score']
+    stacking_drop_list = ['threshold', 'score'] if threshold else ['score']
     stacking_coef_list = df_stacking[ df_stacking.index == stacking_coef_first ]. \
                         drop(stacking_drop_list, axis=1). \
                         values[0][0:len(stacking_valid_pred_list)][np.newaxis, :].T
@@ -138,3 +136,35 @@ def stacking_pred(
                 plt.show()
 
     return y_valid_pred, y_pred
+
+# пропускает модели через стекинг и возвращает лучшее значение
+def stacking_fit(
+    estimator, estimators_list,
+    X_train, y_train, X_valid, y_valid,
+    X_test=pd.DataFrame(), y_test=pd.Series(dtype='int64'),
+    final_estimator=LogisticRegression(),
+    scoring_f=accuracy_score, average=''
+):
+    
+    model = estimator(estimators=estimators_list, final_estimator=final_estimator)
+    model_score = model.fit(X_train, y_train).score(X_valid, y_valid)
+    
+    print('Best valid score: %f\n' % model_score)
+
+    if len(X_test) == 0:
+        return { 'model': model, 'model_score': model_score }
+        
+    y_pred = model.predict(X_test)
+
+    if len(y_test) == 0:
+        return { 'model': model, 'model_score': model_score, 'y_pred': y_pred }
+
+    else:
+        
+        if len(average) > 0:
+            model_score = scoring_f(y_test, y_pred, average=average)
+        else:
+            model_score = scoring_f(y_test, y_pred)
+
+        print('Best test score: %f\n' % model_score)
+        return { 'model': model, 'model_score': model_score, 'y_pred': y_pred }

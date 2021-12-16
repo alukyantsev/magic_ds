@@ -68,13 +68,68 @@ def model_fit(estimator, param_grid,
     if scoring == 'accuracy':
         scoring_f = accuracy_score
         scoring_greater_is_better = True
+    if scoring == 'balanced_accuracy':
+        scoring_f = balanced_accuracy_score
+        scoring_greater_is_better = True
     if scoring == 'f1':
+        scoring_f = f1_score
+        scoring_greater_is_better = True
+    if scoring == 'f1_micro':
+        average='micro'
+        scoring_f = f1_score
+        scoring_greater_is_better = True
+    if scoring == 'f1_macro':
+        average='macro'
+        scoring_f = f1_score
+        scoring_greater_is_better = True
+    if scoring == 'f1_weighted':
+        average='weighted'
+        scoring_f = f1_score
+        scoring_greater_is_better = True
+    if scoring == 'f1_samples':
+        average='samples'
         scoring_f = f1_score
         scoring_greater_is_better = True
     if scoring == 'precision':
         scoring_f = precision_score
         scoring_greater_is_better = True
+    if scoring == 'precision_micro':
+        average='micro'
+        scoring_f = precision_score
+        scoring_greater_is_better = True
+    if scoring == 'precision_macro':
+        average='macro'
+        scoring_f = precision_score
+        scoring_greater_is_better = True
+    if scoring == 'precision_weighted':
+        average='weighted'
+        scoring_f = precision_score
+        scoring_greater_is_better = True
+    if scoring == 'precision_samples':
+        average='samples'
+        scoring_f = precision_score
+        scoring_greater_is_better = True
+    if scoring == 'average_precision_score':
+        average = 'micro'
+        scoring_f = precision_score
+        scoring_greater_is_better = True
     if scoring == 'recall':
+        scoring_f = recall_score
+        scoring_greater_is_better = True
+    if scoring == 'recall_micro':
+        average='micro'
+        scoring_f = recall_score
+        scoring_greater_is_better = True
+    if scoring == 'recall_macro':
+        average='macro'
+        scoring_f = recall_score
+        scoring_greater_is_better = True
+    if scoring == 'recall_weighted':
+        average='weighted'
+        scoring_f = recall_score
+        scoring_greater_is_better = True
+    if scoring == 'recall_samples':
+        average='samples'
         scoring_f = recall_score
         scoring_greater_is_better = True
     if scoring == 'roc_auc':
@@ -159,13 +214,19 @@ def model_fit(estimator, param_grid,
             t_threshold = 0
             for t in threshold:
                 t_y_valid_pred = (y_valid_probas[:,1] > t).astype(int)
-                t_s = scoring_f(y_valid, t_y_valid_pred)
+                if len(average) == 0:
+                    t_s = scoring_f(y_valid, t_y_valid_pred)
+                else:
+                    t_s = scoring_f(y_valid, t_y_valid_pred, average=average)
                 if t_s > t_score:
                     t_score = t_s
                     t_threshold = t
                     y_valid_pred = t_y_valid_pred
 
-        stage2_score = scoring_f(y_valid, y_valid_pred)
+        if len(average) == 0:
+            stage2_score = scoring_f(y_valid, y_valid_pred)
+        else:
+            stage2_score = scoring_f(y_valid, y_valid_pred, average=average)
 
         if (stage2_score > stage2_valid_score) and scoring_greater_is_better:
             stage2_valid_score = stage2_score
@@ -207,6 +268,7 @@ def model_fit(estimator, param_grid,
                 learning_curves_dots=learning_curves_dots,
                 scoring=scoring,
                 scoring_f=scoring_f,
+                average=average,
                 cv=cv,
                 threshold=stage2_valid_t_threshold
             )
@@ -234,7 +296,10 @@ def model_fit(estimator, param_grid,
         return { 'model': stage3_model, 'y_pred': y_test_pred, 'y_valid_pred': stage2_y_valid_pred }
 
     # если есть данные для сверки, то считаем скоринг
-    stage3_score = scoring_f(y_test, y_test_pred)
+    if len(average) == 0:
+        stage3_score = scoring_f(y_test, y_test_pred)
+    else:
+        stage3_score = scoring_f(y_test, y_test_pred, average=average)
 
     # выводим результаты
     if not mute:
@@ -262,6 +327,7 @@ def model_fit(estimator, param_grid,
                 learning_curves_dots=learning_curves_dots,
                 scoring=scoring,
                 scoring_f=scoring_f,
+                average=average,
                 cv=cv,
                 threshold=stage2_valid_t_threshold
             )
@@ -276,6 +342,7 @@ def learning_curves(
     learning_curves_dots=10,
     scoring='accuracy',
     scoring_f=accuracy_score,
+    average='',
     cv=5,
     threshold=0
 ):
@@ -300,8 +367,12 @@ def learning_curves(
             y_valid_probas = model.predict_proba(X_valid.values)
             y_valid_pred = (y_valid_probas[:,1] > threshold).astype(int)
 
-        train_errors.append(scoring_f(y_train[:m], y_train_pred))
-        valid_errors.append(scoring_f(y_valid, y_valid_pred))
+        if len(average) == 0:
+            train_errors.append(scoring_f(y_train[:m], y_train_pred))
+            valid_errors.append(scoring_f(y_valid, y_valid_pred))
+        else:
+            train_errors.append(scoring_f(y_train[:m], y_train_pred, average=average))
+            valid_errors.append(scoring_f(y_valid, y_valid_pred, average=average))
         x.append(m)
 
     train_errors = train_errors if scoring != 'neg_mean_squared_error' else np.sqrt(train_errors)
