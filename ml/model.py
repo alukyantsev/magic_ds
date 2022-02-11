@@ -65,6 +65,7 @@ def model_fit(estimator, param_grid,
 ):
 
     # задаем словарь скоринга
+    average=''
     if scoring == 'accuracy':
         scoring_f = accuracy_score
         scoring_greater_is_better = True
