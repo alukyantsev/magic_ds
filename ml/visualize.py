@@ -24,6 +24,12 @@ def visualize_features_hist(df, columns):
     plt.hist(df[columns], bins=60)
     plt.show()
 
+# визуализация выбросов с помощью boxplot
+def visualize_features_boxplot(df, column):
+
+    sns.boxplot(df[column])
+    plt.show()
+
 # визуализация лучших по скорингу колонок
 def visualize_features_select(df_scores, df_columns, df_bool=pd.DataFrame(), \
     scores_columns='Score', spec_columns='Specs', bool_columns='Using', limit=10):

@@ -9,6 +9,13 @@ def drop_features(df, columns):
     df0 = df0.drop(columns = columns)
     return df0
 
+# удаляет строки
+def drop_rows(df, rows):
+
+    df0 = df.copy()
+    df0 = df0.drop(index=rows)
+    return df0
+
 # удаляет колонки с пропусками более limit %
 def drop_gap(df, limit=50):
 
